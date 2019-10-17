@@ -16,6 +16,7 @@ void toUpperCase(char *word); //Pasar cada caracter de una cadena a mayusculas.
 void toLowerCase(char *word); //Pasar cada caracter de una cadena a minússculas.
 void copiarCadena(char *original, char *copia);
 int hash(char *name); //funcion de hash
+int contarRegistros(struct List *table);
 void buscarId(struct List *table, char *nombre);
 long borrar(struct List *table, long idd);
 long insert(struct Node *position, struct Node *element); //insertar un elemento en la lista encadenada

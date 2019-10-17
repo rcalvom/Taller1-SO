@@ -57,6 +57,21 @@ int hash(char *name){
     return index%TAMANNOLISTA;
 }
 
+int contarRegistros(struct List *table){
+    int registros = 0;
+    for(int i = 0; i<TAMANNOLISTA; i++){
+        if((table + i)->node != NULL){
+            registros++;
+            struct Node nodo = *(table+i)->node;
+            while(nodo.next != NULL){
+                registros++;
+                nodo = *(nodo.next);
+            }
+        }
+    }
+    return registros;
+}
+
 //busca e imprime todos los registros que coincidan con un nombre dado
 void buscarId(struct List *table, char *nombre){
     int index;
@@ -65,20 +80,21 @@ void buscarId(struct List *table, char *nombre){
         n = (char *) malloc(SIZE);
     } while(n == NULL);
     bzero(n, SIZE);
-    copiarCadena(nombre, n);
-    toUpperCase(n);
-    index = hash(n);
-    free(n);
+    toUpperCase(nombre);
+    index = hash(nombre);
     struct Node *toPrint = (table+index)->node;
     int registros = 0;
     while(toPrint != NULL){
-        if(equals(toPrint->name, nombre)){
+        copiarCadena(toPrint->name, n);
+        toUpperCase(n);
+        if(equals(n, nombre)){
             printw("Nombre: %s, ", toPrint->name);
             printw("Id: %li.\n", toPrint->id);
             registros++;
         }
         toPrint = toPrint -> next;
     }
+    free(n);
     printw("\nRegistros encontrados: %i\n\n", registros);
 }
 

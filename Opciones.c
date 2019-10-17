@@ -167,11 +167,18 @@ int BorrarRegistro(struct List* tabla){
     struct dogType *registro = (struct dogType*)malloc(sizeof(struct dogType));     // Declara variables que se van a utilizar.
     bzero(registro, sizeof(struct dogType));
     long id, idTemp;
-    int r;
+    int r, registros;
     FILE *file, *temp;
-    printw("Borrar registro.\n");
-    printw("Ingrese el ID de la mascota de la cual va a borrar el registro: ");
+    printw("Borrar registro.\n\n");
+    do{
+        registros = contarRegistros(tabla);
+    }while(registros == -1);
+    printw("Existen %i registros\n", registros);
+    printw("Ingrese el ID de la mascota de la cual va a borrar el registro (-1 para cancelar): ");
     scanw("%li",&id);                                                               // Se pide el id del registro a borrar y se almacena.
+    if(id == -1){
+        asm("jmp End");
+    }
     printw("\nBuscando Registro a eliminar.");
     file = fopen("dataDogs.dat","r");                                               // Se abre un archivo que contiene las estructuras..
     temp = fopen("temp.dat","w+");                                                  // Se crea un archivo temporal donde se guardaran las estructuras que nos serán eliminadas.
@@ -219,8 +226,9 @@ int BorrarRegistro(struct List* tabla){
     system(his);
     free(his);
     free(his1);
-    free(registro);
-    borrar(tabla, id); 
+    borrar(tabla, id);
+    asm("End:");
+    free(registro); 
     printw("\nPulse cualquier tecla para continuar...\n");                        // Espera por una tecla para continuar.
     noecho();                                                                     // Impide que se muestre el caracter en consola.
     getch();                                                                      // Obtiene el caracter.
